@@ -3,11 +3,11 @@ import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import axios from 'axios';
 
-const initialState = {
-  view: window.location.hash.slice(1),
-  users: [],
-  things: []
-};
+// const initialState = {
+//   view: window.location.hash.slice(1),
+//   users: [],
+//   things: []
+// };
 
 const viewReducer = (state =window.location.hash.slice(1), action)=> { 
   if(action.type === 'SET_VIEW'){
@@ -66,15 +66,38 @@ const deleteThing = (thing)=> {
     dispatch({ type: 'DELETE_THING', thing });
   };
 };
+const createThing = (thing) => {
+  return async(dispatch)=> {
+    await axios.post('/api/things', thing);
+    dispatch({ type: 'CREATE_THING', thing });
+  }
+}
 
-//Create thunk for increase and decrease ranking on Users page
-//C
 
+const deleteUser = (user) => {
+  return async(dispatch) => {
+    await axios.delete(`/api/users/${user.id}`);
+    dispatch({ type: 'DELETE_USER', user });
+  }
+}
+const updateUser = (user) => {
+  return async(dispatch) => {
+    user = (await axios.put(`/api/users/${user.id}`, user)).data;
+    dispatch({ type: 'UPDATE_USER', user });
+  };
+}
+
+const createUser = (user) => {
+  return async(dispatch) => {
+    await axios.post('/api/users', user);
+    dispatch({ type: 'CREATE_USER', user });
+  }
+}
 
 
 const store = createStore(reducer, applyMiddleware(logger, thunk));
 
-export { deleteThing, updateThing };
+export { deleteThing, updateThing, updateUser, deleteUser, createUser, createThing };
 
 export default store;
 
