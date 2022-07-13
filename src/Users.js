@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 
-const Users = ({ users, createUser, deleteUser, things, removeThingFromUser })=> {
+const Users = ({ users, createUser, deleteUser, things, removeThingFromUser, incrementUser })=> {
   return (
     <div>
       <h1>Users</h1>
@@ -14,7 +14,10 @@ const Users = ({ users, createUser, deleteUser, things, removeThingFromUser })=>
             return (
               <li key={ user.id }>
                 { user.name }
+                { user.ranking }
                 <button onClick={ ()=> deleteUser(user)}>x</button>
+                <button onClick={ ()=> incrementUser(user, +1)}>+</button>
+                <button onClick={ ()=> incrementUser(user, -1)}>-</button>
                 <ul>
                 {
                   things.filter( thing => thing.userId === user.id)
@@ -62,6 +65,11 @@ const mapDispatch = (dispatch)=> {
       await axios.delete(`/api/users/${user.id}`);
       dispatch({ type: 'DELETE_USER', user});
     },
+    incrementUser: async(user, dir)=> {
+      user = {...user, ranking: user.ranking + dir};
+      user = (await axios.put(`/api/users/${user.id}`, user)).data;
+      dispatch({ type: 'UPDATE_USER', user});
+    }
   };
 }
 export default connect(mapStateToProps, mapDispatch)(Users);
