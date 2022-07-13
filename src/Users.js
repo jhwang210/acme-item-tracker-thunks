@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { deleteUser, updateUser, createUser } from './store';
+import { deleteUser, updateUser, createUser, updateThing } from './store';
 
 
 const Users = ({ users, createUser, deleteUser, things, removeThingFromUser, incrementUser })=> {
@@ -58,9 +58,10 @@ const mapDispatch = (dispatch)=> {
       //dispatch(createUser({name: Math.random()}));
     },
     removeThingFromUser: async(thing)=> {
-      thing = {...thing, userId: null}
-      const updatedThing = (await axios.put(`/api/things/${thing.id}`, thing)).data
-      dispatch({ type: 'UPDATE_THING', thing: updatedThing});
+      thing = {...thing, userId: null};
+      dispatch(updateThing(thing));
+      // const updatedThing = (await axios.put(`/api/things/${thing.id}`, thing)).data
+      // dispatch({ type: 'UPDATE_THING', thing: updatedThing});
     },
     deleteUser: (user)=> {
       dispatch(deleteUser(user));
