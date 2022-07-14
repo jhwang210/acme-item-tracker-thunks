@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import { deleteUser, updateUser, createUser, updateThing } from './store';
 
 
@@ -14,11 +13,18 @@ const Users = ({ users, createUser, deleteUser, things, removeThingFromUser, inc
           users.map( user => {
             return (
               <li key={ user.id }>
-                { user.name }
-                { user.ranking }
-                <button onClick={ ()=> deleteUser(user)}>x</button>
-                <button onClick={ ()=> incrementUser(user, +1)}>+</button>
-                <button onClick={ ()=> incrementUser(user, -1)}>-</button>
+                <div>
+                  Name: { user.name }
+                  <button onClick={ ()=> deleteUser(user)}>x</button>
+                </div>
+                <div>
+                  Ranking: { user.ranking }
+                  <button onClick={ ()=> incrementUser(user, +1)}>+</button>
+                  <button onClick={ ()=> incrementUser(user, -1)}>-</button>
+                </div>
+                <div>
+                  Items:
+                </div>
                 <ul>
                 {
                   things.filter( thing => thing.userId === user.id)

@@ -88,6 +88,7 @@ const updateUser = (user) => {
 }
 
 const createUser = (user) => {
+  // I am posting user to database, but the new user that renders does not have ranking or ID until I refresh
   return async(dispatch) => {
     await axios.post('/api/users', user);
     dispatch({ type: 'CREATE_USER', user });
